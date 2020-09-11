@@ -1,0 +1,15 @@
+<p>registration works!</p>
+<div *ngIf="!confirm">
+  <label>username:
+    <input [(ngModel)]="username" placeholder="name"/>
+  </label>
+  <br/>
+  <label>email:
+    <input [(ngModel)]="email" placeholder="name"/>
+  </label>
+  <br/>  <label>password:
+    <input [(ngModel)]="password" placeholder="password"/>
+  </label>
+  <br/>
+  <input type="submit" (click)="register()">
+</div>

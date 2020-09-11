@@ -1,0 +1,8 @@
+.holder {
+  display: inline;
+}
+.holder img {
+  height: auto;
+  max-width: 800px;
+  object-fit: cover;
+}

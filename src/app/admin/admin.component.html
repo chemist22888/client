@@ -1,0 +1,33 @@
+<p>admin works!</p>
+<form [formGroup]="form">
+  <input type="radio" value='Posts' formControlName="type" >Posts
+  <input type="radio" value='Comments' formControlName="type">Comments
+  <input type="radio" value='Images' formControlName="type">Images
+</form>
+<div *ngIf="form.value.type === 'Posts'">
+  post
+  <button (click)="loadMorePosts()">load posts</button>
+  <ul>
+    <li *ngFor="let post of posts">{{post.text}}<button>del</button></li>
+  </ul>
+</div>
+<div *ngIf="form.value.type === 'Comments'">
+  post
+  <button (click)="loadMoreComments()">load comments</button>
+  <ul>
+    <li *ngFor="let comment of comments">{{comment.text}}<button>del</button></li>
+  </ul>
+</div>
+<div *ngIf="form.value.type === 'Images'">
+  post
+  <button (click)="loadMoreImages()">load comments</button>
+  <ul>
+    <li *ngFor="let image of getKeys()">
+      <div class="holder">
+      <img [src]="images.get(image)">
+        <button>del</button>
+      </div>
+    </li>
+  </ul>
+  {{images.size}}
+</div>

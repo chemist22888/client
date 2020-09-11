@@ -1,0 +1,21 @@
+<style>
+  .red{
+    color:red;
+  }
+  .blue{
+    color:blue;
+  }
+</style>
+
+{{chat?.id}}
+<p>chat works!</p>
+<div class="blue">123</div>
+<ul class="messages">
+<li *ngFor="let message of chat?.messages">
+  <div [ngClass]="(message.user.id == myId)?'red':'blue'">{{message.text}}{{message.user.id}}</div>
+</li>
+</ul>
+<!--<form>-->
+  <input type="text" [(ngModel)]="messageText">
+  <button (click)="sendMessage()">send</button>
+<!--</form>-->

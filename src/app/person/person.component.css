@@ -1,0 +1,30 @@
+.wall{
+  background-color: #fc0; /* Цвет фона слоя */
+  padding: 5px; /* Поля вокруг текста */
+  float: left; /* Обтекание по правому краю */
+  width: 65%; /* Ширина слоя */}
+.friends{
+  background-color: #c0c0c0; /* Цвет фона слоя */
+  padding: 5px; /* Поля вокруг текста */
+  width: 25%; /* Ширина слоя */
+  float: left; /* Обтекание по правому краю */
+}
+.wrapper{
+  overflow: hidden;
+}
+.avatar {
+  display: inline;
+}
+.avatar img {
+  height: auto;
+  max-width: 150px;
+  object-fit: cover;
+}
+.postimage {
+  display: inline;
+}
+.postimage img {
+  height: auto;
+  max-width: 600px;
+  object-fit: cover;
+}
