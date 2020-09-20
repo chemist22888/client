@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Post} from '../entity/post';
 import {Comment} from '../entity/comment';
@@ -21,17 +21,17 @@ export class AdminService {
   loadMoreImages(lastId: number = -1, quantity: number = -1): Observable<string[]> {
     return this.http.get<string[]>(`http://localhost:8080/admin/getImages?lastId=${lastId}&quantity=${quantity}`);
   }
-  formParams(lastId?: number, quantity?: number): string {
-    let params = '';
-    if (lastId) {
-      params += `lastId=${lastId}&`;
-    }
-    if (quantity) {
-      params += `quantity=${quantity}`;
-    } else {
-      params += `quantity=10`;
-    }
-    return params;
+  deletePost(postId: number) {
+    return this.http.post<string[]>(`http://localhost:8080/admin/dropPost`, new HttpParams()
+      .set('id', String(postId)));
+  }
+  deleteComment(commentId: number) {
+    return this.http.post<string[]>(`http://localhost:8080/admin/dropComment`, new HttpParams()
+      .set('id', String(commentId)));
+  }
+  deleteImage(imageId: number) {
+    return this.http.post<string[]>(`http://localhost:8080/admin/dropImage`, new HttpParams()
+      .set('id', String(imageId)));
   }
 }
 

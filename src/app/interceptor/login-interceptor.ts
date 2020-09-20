@@ -5,9 +5,6 @@ import * as constants from '../configs/constants';
 @Injectable()
 export class LoginInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    // console.log(`Basic ${constants.TOKEN_API}`);
-
-
     let  authHeader;
     if (!req.headers.get('authorization')) {
       if (localStorage.getItem('access_token')) {

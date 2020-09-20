@@ -9,6 +9,9 @@ export class User {
   wall: Wall;
   friends: User[];
   friendStatus: number;
-  avatar: string;
+  avatar: number;
   role: string;
+  constructor(id) {
+    this.id = id;
+  }
 }

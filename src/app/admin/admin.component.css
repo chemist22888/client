@@ -6,3 +6,19 @@
   max-width: 800px;
   object-fit: cover;
 }
+.postimage {
+  display: inline;
+}
+.postimage img {
+  height: auto;
+  max-width: 100px;
+  object-fit: cover;
+}
+.image {
+  display: inline;
+}
+.image img {
+  height: auto;
+  max-width: 300px;
+  object-fit: cover;
+}

@@ -6,7 +6,7 @@ export class Post {
   id: number;
   text: string;
   coments: Comment[];
-  images: string[];
+  images: number[];
   imageUrls: SafeUrl[] = [];
   likes: Like[];
 }

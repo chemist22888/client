@@ -7,6 +7,7 @@ import * as SockJS from 'sockjs-client';
 import {Message} from '../entity/message';
 import {DataReciever} from '../data-reciever';
 import * as constants from '../configs/constants';
+import {User} from "../entity/user";
 
 @Component({
   selector: 'app-chat',
@@ -18,82 +19,64 @@ export class ChatComponent implements OnInit, DataReciever {
   constructor(private route: ActivatedRoute, private chatService: ChatService) {
 
   }
+
   @Input()
   chatId: string;
   chat: Chat;
   messageText: string;
   stompClient: any;
   myId: number;
-  prop=2;
+  prop = 2;
+  userId;
+
   ngOnInit() {
     this.chatId = this.route.snapshot.paramMap.get('id');
+    this.userId = localStorage.getItem('íd');
     this.chatService.getChat(this.chatId).subscribe(chat => {
       console.log('t1t' + chat.id);
       this.chat = chat;
       this.connect();
-      this.myId = parseInt(localStorage.getItem('id'));
+      this.myId = parseInt(localStorage.getItem('id'), 0);
+      chat.messages.forEach(value => console.log(value));
+    });
+  }
 
-  });
-
-    console.log('tt');}
   private connect() {
-
-
     const accessToken = localStorage.getItem('access_token');
-
-
-
-    const ws = new SockJS('http://localhost:8080/socket?access_token='+accessToken);
-        ws.withCredentials = true ;
+    const ws = new SockJS('http://localhost:8080/socket?access_token=' + accessToken);
+    ws.withCredentials = true;
     this.stompClient = Stomp.over(ws);
     this.stompClient.reconnect_delay = 5000;
     this.stompClient.connect({Authorization: `Bearer ${accessToken}`});
   }
+
   onMessageReceived(message) {
     let textMsg: string = message.toString();
     textMsg = textMsg.substring(textMsg.indexOf('{'));
     console.log(message);
     const msg: Message = JSON.parse(message.body);
-    // JSON.parse(textMsg).chatId;
-    console.log(msg.chat.id + ' ' + this.chat.id);
-    if (msg.chat.id === this.chat.id) {
-      console.log('5f');
-      // msg.chat = this.chat;
+    console.log(msg.chatId + ' ' + this.chat.id);
+    if (msg.chatId === this.chat.id) {
       const l = this.chat.messages.push(msg);
-      // console.log(this.chat.messages[l-1])
-      // msg);messages.push(msg);
     }
-    console.log('Message Recieved from Server :: ' + msg.text);
   }
 
   sendMessage() {
-
     const msg = new Message();
     msg.text = this.messageText;
-    msg.chat = Object.assign({}, this.chat);
-    msg.chat.messages = null;
-    // msg.chat.messages = null;
+    msg.user = new User(this.userId);
+    msg.chatId = this.chat.id;
     console.log('t1t' + this.chat.messages.length);
     if (this.chat) {
       this.stompClient.send('/app/send/message/c' + this.chat.id, {}, JSON.stringify(msg));
-
-      // this.chatComponent.chat.messages.push(msg);
     }
-    // this.chatService.writeMessage(this.messageText,this.chatId).subscribe(message => this.chat.messages.push(message));
   }
 
   recieve(type, msg) {
     console.log(msg);
-    console.log(msg.chat.id + ' ' + this.chat.id);
-    if (type === constants.MESSAGE_DATA && msg.chat.id === this.chat.id) {
+    if (type === constants.MESSAGE_DATA && msg.chatId === this.chat.id) {
       console.log('5f');
-      // msg.chat = this.chat;
       const l = this.chat.messages.push(msg);
-      console.log('Message Recieved from Server :: ' + msg.text);
-      // console.log(this.chat.messages[l-1])
-      // msg);messages.push(msg);
     }
-    console.log('Message Recieved from Server :: ' + msg.text);
   }
-
 }

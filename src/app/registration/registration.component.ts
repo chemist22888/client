@@ -15,11 +15,8 @@ export class RegistrationComponent implements OnInit {
   constructor(private httpService: HttpServiceService, private route: ActivatedRoute,private router: Router) { }
 
   ngOnInit() {
-    console.log('aa');
-
     this.route.queryParamMap.subscribe(params => {
       this.confirmId = params.get('confirmId');
-      console.log(this.confirmId);
 
       if (this.confirmId) {
         console.log(this.confirmId);

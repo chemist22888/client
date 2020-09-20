@@ -13,7 +13,6 @@ export class UserService {
   getLogin() {
     let header = new HttpHeaders();
     header = header.append('foo', 'foo');
-    // header = header.append('authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODY3MjkyNzEsInVzZXJfbmFtZSI6ImxvZ2luMSIsImF1dGhvcml0aWVzIjpbIkFETUlOIl0sImp0aSI6IjI2M2QwYjNjLTA2MDItNGU0Yi1hMWVjLTkxM2MzZGZkOTE2NCIsImNsaWVudF9pZCI6ImNsaWVudElkUGFzc3dvcmQiLCJzY29wZSI6WyJyZWFkIl19.bZQ2cgeNeHbRW60iN8iEXmfKxkAIMydW80NLAp-Rp6M');
     return this.http.get<string>('http://localhost:8080/me',
       { headers: header});
   }

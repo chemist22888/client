@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {User} from '../entity/user';
 import {HttpServiceService} from '../service/http-service.service';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
@@ -29,16 +29,18 @@ export class PersonComponent implements OnInit, DataReciever {
   DECLINE_FRIEND_REQUEST = 0;
   me: User;
   avatarUrl: SafeUrl;
+  uploadedImages: number[] = [];
+  imagesPreview: SafeUrl[] = [];
+  postText: string = '';
+  id: number;
+
+  @ViewChild('imageInput', {static: false}) myDiv: ElementRef;
   constructor(    private route: ActivatedRoute,
                   private httpService: HttpServiceService,
                   private router: Router,
                   private userService: UserService,
                   private sanitizer: DomSanitizer,
-                  ) {
-
-    // const login1: Observable<string> = route.params.pipe(map(p => p.login));
-    // login1.subscribe(login => this.login = login);
-  }
+                  ) {}
   applyRequest() {
     this.userService.applyRequest(this.user.username).subscribe(() => this.user.friendStatus = 1);
   }
@@ -56,17 +58,14 @@ export class PersonComponent implements OnInit, DataReciever {
   }
 
   ngOnInit() {
+    this.id = Number.parseInt(localStorage.getItem('id'), 0);
     this.me = JSON.parse(localStorage.getItem('me'));
-    console.log('e' + this.router.url);
     if (this.router.url === '/me') {
       this.login = localStorage.getItem('username');
     } else {
       this.login = this.route.snapshot.paramMap.get('login'); }
-    console.log(this.login + 'llo');
     this.httpService.user(this.login).subscribe(user => {
-      console.log(user);
       this.user = user;
-      console.log(user.friendStatus);
 
       this.httpService.loadImage(user.avatar).subscribe(image => {
         const unsafeImageUrl = URL.createObjectURL(image);
@@ -76,7 +75,6 @@ export class PersonComponent implements OnInit, DataReciever {
         post.imageUrls = [];
         // console.log(post.images);
         post.images.forEach(image => {
-          console.log(image);
           this.httpService.loadImage(image).subscribe(result => {
                     const unsafeImageUrl = URL.createObjectURL(result);
                     const imageUrl = this.sanitizer.bypassSecurityTrustUrl(unsafeImageUrl);
@@ -89,16 +87,6 @@ export class PersonComponent implements OnInit, DataReciever {
 
     this.connect();
   }
-
-
-//   loadImage(name:string):SafeUrl {
-//     this.httpService.loadImage(name).subscribe(result => {
-//       const src = this.sanitizer.bypassSecurityTrustUrl('data:image/jpg;' + result);
-//       return src;
-//     });
-// }
-
-
   private connect() {
     const ws = new SockJS('http://localhost:8080/socket');
     this.stompClient = Stomp.over(ws);
@@ -112,13 +100,11 @@ export class PersonComponent implements OnInit, DataReciever {
     console.log('friends');
     let textMsg: string = message.toString();
     textMsg = textMsg.substring(textMsg.indexOf('{'));
-    // JSON.parse(textMsg).chatId;
+
     if (JSON.parse(textMsg).username === this.user.username) {
       this.user.friendStatus = JSON.parse(textMsg).friendStatus;
     }
   }
-
-
   recieve(type, object) {
     console.log(type);
     console.log(object);
@@ -146,12 +132,76 @@ export class PersonComponent implements OnInit, DataReciever {
               break;
           }
         }
+      case constants.COMENT_DATA:
+        const postId = object.post.id;
+        if (postId !== this.id) {
+          const postIndex = this.user.wall.posts.findIndex(post => post.id === postId);
+          this.user.wall.posts[postIndex].coments.push(object);
+        }
     }
   }
   likePost(post: Post) {
-    console.log('like');
     const like = new Like();
-    like.user = this.me;
+    like.user = new User(this.id);
     this.userService.likePost(post.id).subscribe(res => post.likes.push(like));
+  }
+  // tslint:disable-next-line:align
+  uploadImage(evt, funct: (file: File) => void) {
+    const files = evt.target.files;
+    const file = files[0];
+
+    if (files && file) {
+      const reader = new FileReader();
+
+      reader.onload = funct.bind(this);
+
+      reader.readAsBinaryString(file);
+    }
+  }
+
+  _handleReaderLoaded(readerEvt) {
+    const binaryString = readerEvt.target.result;
+    const encodedString = btoa(binaryString);
+
+    this.httpService.uploadImage(encodedString)
+      .subscribe(e => {
+        console.log(e);
+        this.uploadedImages.push(Number.parseInt(JSON.stringify(e)));
+        const imageUrl = this.sanitizer.bypassSecurityTrustUrl('data:image/png;base64,' + encodedString);
+        this.imagesPreview.push(imageUrl);
+      });
+  }
+  writePost(text: string) {
+    this.httpService.writePost(text, this.uploadedImages).subscribe(res => {
+      this.uploadedImages = [];
+      this.imagesPreview = [];
+      res.imageUrls = [];
+      res.images.forEach(image => {
+        this.httpService.loadImage(image).subscribe(result => {
+          const unsafeImageUrl = URL.createObjectURL(result);
+          const imageUrl = this.sanitizer.bypassSecurityTrustUrl(unsafeImageUrl);
+          res.imageUrls.push(imageUrl);
+        });
+      });
+      this.user.wall.posts.push(res);
+    });
+  }
+  loadAvatar(event) {
+    const binaryString = event.target.result;
+    const encodedString = btoa(binaryString);
+
+    this.httpService.uploadImage(encodedString)
+      .subscribe(e => {
+        console.log(e);
+        this.httpService.loadAvatar(e).subscribe(res => {
+          this.uploadedImages.push(e);
+          this.avatarUrl = this.sanitizer.bypassSecurityTrustUrl('data:image/png;base64,' + encodedString);
+        });
+      });
+  }
+  writeComment(text: string, post: Post) {
+    this.httpService.sendComment(text, post.id).subscribe(comment => {
+      post.coments.push(comment);
+    });
   }
 }

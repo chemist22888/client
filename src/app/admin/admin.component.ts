@@ -5,6 +5,7 @@ import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AdminService} from '../service/admin.service';
 import {HttpServiceService} from '../service/http-service.service';
+import {findIndex} from "rxjs/operators";
 
 @Component({
   selector: 'app-admin',
@@ -14,9 +15,9 @@ import {HttpServiceService} from '../service/http-service.service';
 export class AdminComponent implements OnInit {
   posts: Post[] = [];
   comments: Comment[] = [];
-  images: Map<string, SafeUrl> = new Map<string, SafeUrl>();
+  images: Map<number, SafeUrl> = new Map<number, SafeUrl>();
   form: FormGroup;
-  keys: Array<string>;
+  keys: Array<number>;
   constructor(fb: FormBuilder, private adminService: AdminService,
               private httpService: HttpServiceService,
               private sanitizer: DomSanitizer,
@@ -25,7 +26,7 @@ export class AdminComponent implements OnInit {
       type: ['', Validators.required]
     });
   }
-  getKeys(): Array<string> {
+  getKeys(): Array<number> {
     return Array.from(this.images.keys());
   }
   ngOnInit() {
@@ -37,6 +38,14 @@ export class AdminComponent implements OnInit {
       posts => {
         console.log(posts);
         posts.forEach(post => {
+          post.imageUrls = [];
+          post.images.forEach(imageId => {
+            this.httpService.loadImage(imageId).subscribe(image => {
+              const unsafeImageUrl = URL.createObjectURL(image);
+              const imageUrl = this.sanitizer.bypassSecurityTrustUrl(unsafeImageUrl);
+              post.imageUrls.push(imageUrl);
+            });
+          });
           this.posts.push(post);
           console.log(post);
         });
@@ -62,15 +71,39 @@ export class AdminComponent implements OnInit {
     this.adminService.loadMoreImages(id, 10).subscribe(
       urls => {
         urls.forEach(url => {
-          this.httpService.loadImage(url).subscribe(image => {
+          // tslint:disable-next-line:no-shadowed-variable
+          const id = Number.parseInt(url, 0);
+          this.httpService.loadImage(id).subscribe(image => {
             const unsafeImageUrl = URL.createObjectURL(image);
             const imageUrl = this.sanitizer.bypassSecurityTrustUrl(unsafeImageUrl);
-            this.images.set(url, imageUrl);
+            this.images.set(id, imageUrl);
           });
         });
         this.keys = Array.from(this.images.keys());
       }
     );
 
+  }
+  deletePost(id) {
+    this.adminService.deletePost(id).subscribe(res => {
+      const index =  this.posts.findIndex(post => post.id === id);
+
+      if (index > -1) {
+        this.posts.splice(index, 1);
+      }
+    });
+  }
+  deleteComment(id) {
+    this.adminService.deleteComment(id).subscribe(res => {
+      const index =  this.posts.findIndex(comment => comment.id === id);
+      if (index > -1) {
+        this.comments.splice(index, 1);
+      }
+    });;
+  }
+  deleteImage(id) {
+    this.adminService.deleteImage(id).subscribe(res => {
+      this.images.delete(id);
+    });;
   }
 }

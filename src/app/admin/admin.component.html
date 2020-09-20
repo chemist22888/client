@@ -8,14 +8,20 @@
   post
   <button (click)="loadMorePosts()">load posts</button>
   <ul>
-    <li *ngFor="let post of posts">{{post.text}}<button>del</button></li>
+    <li *ngFor="let post of posts">{{post.text}}<button (click)="deletePost(post.id)">
+      del</button>
+      <div *ngFor="let previewUrl of post.imageUrls" class="postimage">
+        <img [src]="previewUrl" class="preview">
+      </div>
+    </li>
+
   </ul>
 </div>
 <div *ngIf="form.value.type === 'Comments'">
   post
   <button (click)="loadMoreComments()">load comments</button>
   <ul>
-    <li *ngFor="let comment of comments">{{comment.text}}<button>del</button></li>
+    <li *ngFor="let comment of comments">{{comment.text}}<button (click)="deleteComment(comment.id)">del</button></li>
   </ul>
 </div>
 <div *ngIf="form.value.type === 'Images'">
@@ -23,9 +29,9 @@
   <button (click)="loadMoreImages()">load comments</button>
   <ul>
     <li *ngFor="let image of getKeys()">
-      <div class="holder">
+      <div class="image">
       <img [src]="images.get(image)">
-        <button>del</button>
+        <button (click)="deleteImage(image)">del</button>
       </div>
     </li>
   </ul>
