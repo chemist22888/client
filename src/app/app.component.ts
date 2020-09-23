@@ -24,7 +24,7 @@ import * as constants from './configs/constants';
 })
 export class AppComponent implements OnInit{
   title = 'client';
-  webSocketEndPoint = 'http://localhost:8080/ws';
+  webSocketEndPoint = `${constants.BASE_URL}/ws`;
   topic = '/topic/greetings';
   stompClient: any;
   @ViewChildren(ChatComponent, {})
@@ -56,8 +56,9 @@ export class AppComponent implements OnInit{
     const id = Number.parseInt(localStorage.getItem('id'),0);
 
 
-    const ws = new SockJS('http://localhost:8080/socket?access_token=' + accessToken);
-    ws.withCredentials = true ;
+    const ws = new SockJS(`${constants.BASE_URL}/socket?access_token=` + accessToken);
+    // ws.withCredentials = true ;
+
     this.stompClient = Stomp.over(ws);
     this.stompClient.connect({Authorization: `Bearer ${accessToken}`},  (frame) => {
       this.stompClient.subscribe('/user/queue/chat',  (sdkEvent) => {

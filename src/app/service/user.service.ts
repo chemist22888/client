@@ -13,25 +13,25 @@ export class UserService {
   getLogin() {
     let header = new HttpHeaders();
     header = header.append('foo', 'foo');
-    return this.http.get<string>('http://localhost:8080/me',
+    return this.http.get<string>(`${constants.BASE_URL}/me`,
       { headers: header});
   }
   applyRequest(username: string) {
-    return this.http.post(`http://localhost:8080/applyFriendReq`, new HttpParams().set('username', username));
+    return this.http.post(`${constants.BASE_URL}/applyFriendReq`, new HttpParams().set('username', username));
   }
   acceptRequest(username: string) {
-    return this.http.post(`http://localhost:8080/acceptFriendReq`, new HttpParams().set('username', username));
+    return this.http.post(`${constants.BASE_URL}/acceptFriendReq`, new HttpParams().set('username', username));
   }
   declineRequest(username: string) {
-    return this.http.post(`http://localhost:8080/declineFriendReq`, new HttpParams().set('username', username));
+    return this.http.post(`${constants.BASE_URL}/declineFriendReq`, new HttpParams().set('username', username));
   }
   unbond(username: string) {
-    return this.http.post(`http://localhost:8080/unbond`, new HttpParams().set('username', username));
+    return this.http.post(`${constants.BASE_URL}/unbond`, new HttpParams().set('username', username));
   }
   cancelRequest(username: string) {
-    return this.http.post(`http://localhost:8080/cancelFriendReq`, new HttpParams().set('username', username));
+    return this.http.post(`${constants.BASE_URL}/cancelFriendReq`, new HttpParams().set('username', username));
   }
   likePost(postId: number) {
-    return this.http.post(`http://localhost:8080/likePost`, new HttpParams().set('postId', '' + postId));
+    return this.http.post(`${constants.BASE_URL}/likePost`, new HttpParams().set('postId', '' + postId));
   }
 }

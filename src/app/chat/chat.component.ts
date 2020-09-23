@@ -43,7 +43,7 @@ export class ChatComponent implements OnInit, DataReciever {
 
   private connect() {
     const accessToken = localStorage.getItem('access_token');
-    const ws = new SockJS('http://localhost:8080/socket?access_token=' + accessToken);
+    const ws = new SockJS(`${constants.BASE_URL}/socket?access_token=` + accessToken);
     ws.withCredentials = true;
     this.stompClient = Stomp.over(ws);
     this.stompClient.reconnect_delay = 5000;

@@ -37,7 +37,7 @@ export class AuthenticationService {
   .set('username', username)
   .set('password',password);
 
-    return this.http.post('http://localhost:8080/oauth/token', data, {headers}).pipe(map(auth => {
+    return this.http.post(`${constants.BASE_URL}/oauth/token`, data, {headers}).pipe(map(auth => {
       console.log(auth);
       if (auth['access_token']) {
           localStorage.setItem('access_token', auth['access_token']);

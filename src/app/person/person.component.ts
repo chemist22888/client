@@ -88,7 +88,7 @@ export class PersonComponent implements OnInit, DataReciever {
     this.connect();
   }
   private connect() {
-    const ws = new SockJS('http://localhost:8080/socket');
+    const ws = new SockJS(`${constants.BASE_URL}/socket`);
     this.stompClient = Stomp.over(ws);
     this.stompClient.connect({Authorization: 'Basic ' + localStorage.getItem('token')},  (frame) => {
       this.stompClient.subscribe('/user/friend',  (sdkEvent) => {

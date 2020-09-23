@@ -14,7 +14,7 @@ export class HttpServiceService {
 
   constructor(private http: HttpClient) { }
   foo() {
-    return this.http.post('http://localhost:8080/wtf', {});
+    return this.http.post(`${constants.BASE_URL}/wtf`, {});
   }
   registrateUser(username: string, password: string, email: string) {
     const httpBody = new HttpParams()
@@ -22,18 +22,18 @@ export class HttpServiceService {
       .set('password', password)
       .set('email', email);
 
-    return this.http.post('http://localhost:8080/registerUser', httpBody);
+    return this.http.post(`${constants.BASE_URL}/registerUser`, httpBody);
   }
   confirmRegistration(id: string) {
     const httpBody = new HttpParams()
       .set('id', id);
-    return this.http.post('http://localhost:8080/confirmRegistration', httpBody);
+    return this.http.post(`${constants.BASE_URL}/confirmRegistration`, httpBody);
   }
   login(token: string) {
     let headers: HttpHeaders = new HttpHeaders();
     headers = headers.append('Authorization', `Basic ${token}`);
     console.log(headers);
-    return this.http.get<User>('http://localhost:8080/user/login1', { headers });
+    return this.http.get<User>(`${constants.BASE_URL}/user/login1`, { headers });
   }
 
   loadImage(name: number) {
@@ -41,26 +41,26 @@ export class HttpServiceService {
   }
 
   uploadImage(base64textString) {
-    return this.http.post<number>('http://localhost:8080/loadImage', 'data:image/png;base64,'
+    return this.http.post<number>(`${constants.BASE_URL}/loadImage`, 'data:image/png;base64,'
       + base64textString);
   }
   user(login: string) {
     console.log(login);
 
-    return this.http.get<User>(`http://localhost:8080/user/${login}`, {});
+    return this.http.get<User>(`${constants.BASE_URL}/user/${login}`, {});
   }
   writePost(text: string, images: number[]) {
     const post = new Post();
     post.text = text;
     post.images = images;
 
-    return this.http.post<Post>('http://localhost:8080/write', post);
+    return this.http.post<Post>(`${constants.BASE_URL}/write`, post);
   }
   loadAvatar(image: number) {
-    return this.http.post('http://localhost:8080' + `/loadAvatar`, new HttpParams().set('image', String(image)));
+    return this.http.post(`${constants.BASE_URL}` + `/loadAvatar`, new HttpParams().set('image', String(image)));
   }
   sendComment(text: string, postId: number) {
-    return this.http.post<Comment>('http://localhost:8080' + `/writeComent`, new HttpParams()
+    return this.http.post<Comment>(`${constants.BASE_URL}` + `/writeComent`, new HttpParams()
       .set('text', text)
       .set('postId', String(postId)));
 
