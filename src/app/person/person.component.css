@@ -1,14 +1,5 @@
-.wall{
-  background-color: #fc0; /* Цвет фона слоя */
-  padding: 5px; /* Поля вокруг текста */
-  float: left; /* Обтекание по правому краю */
-  width: 65%; /* Ширина слоя */}
-.friends{
-  background-color: #c0c0c0; /* Цвет фона слоя */
-  padding: 5px; /* Поля вокруг текста */
-  width: 25%; /* Ширина слоя */
-  float: left; /* Обтекание по правому краю */
-}
+#container{width:100%;}
+
 .wrapper{
   overflow: hidden;
 }
@@ -19,9 +10,64 @@
   height: auto;
   max-width: 150px;
   object-fit: cover;
+  text-align: center;
+}
+.comment{
+  font-size:small;
+}
+.like_a{
+  cursor: pointer; /* "hand" cursor */
+
+  border: 0;
+  width:30px;
+  height: 30px;
+  background:transparent url('src/assets/like_a.png') no-repeat 50% 50%;
+  filter: brightness(1);
+}
+.like_na{
+  cursor: pointer; /* "hand" cursor */
+  border: 0;
+  width:30px;
+  height: 30px;
+  background:transparent url('src/assets/like_na.png') no-repeat 50% 50%;
+  filter: brightness(1);
+}
+.like_a:hover{
+  filter: brightness(0.5);
+}
+.like_na:hover{
+  filter:invert(0.3);
+}
+.inputfile {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+  round-clip: 1;
+  border-radius: 50px;
+}
+.inputfile + label {
+  cursor: pointer; /* "hand" cursor */
+}
+.inputfile + label {
+  font-size: 1.25em;
+  font-weight: 700;
+  color: white;
+  background-color: black;
+  display: inline-block;
+  border-radius: 50px;
+
+}
+
+.inputfile + label:hover {
+  background-color: red;
 }
 .postimage {
+  object-fit: cover;
   display: inline;
+  max-width: 100px;
 }
 .postimage img {
   height: auto;
@@ -33,3 +79,45 @@
   max-width: 100px;
   object-fit: cover;
 }
+#avatarsection{
+  /*padding-bottom: 10em;*/
+  /*margin-bottom: -100em;*/
+  float:left;
+  width: 20%;
+  flex: 1; /* additionally, equal width */
+
+  padding: 1em;
+}
+.friendsTable{
+  height: 100px;
+  overflow:auto;
+}
+textarea {
+  width: 600px;
+  height: 150px;
+}
+.content {
+  display:inline-block;
+  position:relative;}
+/*#txtArea,#buttons{*/
+/*  display:inline-block;*/
+/*  vertical-align: top;*/
+/*  position: relative;*/
+/*}*/
+#friendsection{
+  /*padding-bottom: 10em;*/
+  /*margin-bottom: -10em;*/
+  flex: 1; /* additionally, equal width */
+  padding: 1em;
+  float:left;
+  width: 30%;
+  height: calc(100% - 50px);
+}
+#basicinfo{
+  overflow:auto;
+}
+#sendsection{
+  float:left;
+  width: 10%;
+}
+#wall{}

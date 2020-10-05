@@ -7,6 +7,10 @@ import {ChatComponent} from './chat/chat.component';
 import {LoginGuard} from './interceptor/login-guard';
 import {RegistrationComponent} from './registration/registration.component';
 import {AdminComponent} from './admin/admin.component';
+import {ChatsComponent} from "./chats/chats.component";
+import {NewsComponent} from "./news/news.component";
+import {FriendRequestComponent} from "./friend-request/friend-request.component";
+import {AboutComponent} from "./about/about.component";
 
 
 const appRoutes: Routes = [
@@ -17,6 +21,10 @@ const appRoutes: Routes = [
   {path: 'me', component: PersonComponent, canActivate: [LoginGuard]},
   {path: 'register', component: RegistrationComponent},
   {path: 'admin', component: AdminComponent},
+  {path: 'chats', component: ChatsComponent},
+  {path: 'news', component: NewsComponent},
+  {path: 'request', component: FriendRequestComponent},
+  {path: 'about', component: AboutComponent},
 ];
 export const routing = RouterModule.forRoot(appRoutes);
 

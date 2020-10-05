@@ -15,4 +15,3 @@ export const DECLINE_FRIEND_REQUEST = 0;
 export const MESSAGE_DATA = 0;
 export const FRIEND_DATA = 1;
 export const COMENT_DATA = 2;
-

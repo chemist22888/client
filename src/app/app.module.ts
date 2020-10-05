@@ -16,6 +16,10 @@ import {myRxStompConfig} from './ws/my-rx-stomp-config';
 import { CookieService } from 'ngx-cookie-service';
 import { RegistrationComponent } from './registration/registration.component';
 import { AdminComponent } from './admin/admin.component';
+import { ChatsComponent } from './chats/chats.component';
+import { NewsComponent } from './news/news.component';
+import { FriendRequestComponent } from './friend-request/friend-request.component';
+import { AboutComponent } from './about/about.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +28,11 @@ import { AdminComponent } from './admin/admin.component';
     PersonComponent,
     ChatComponent,
     RegistrationComponent,
-    AdminComponent
+    AdminComponent,
+    ChatsComponent,
+    NewsComponent,
+    FriendRequestComponent,
+    AboutComponent
   ],
   imports: [routing,
     BrowserModule,

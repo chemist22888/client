@@ -1,66 +1,104 @@
-{{user?.username}}
-<div class="avatar">
-  <img [src]="avatarUrl">
-</div>
-<div *ngIf="user?.id === id">
-  <input type="file" (change)="uploadImage($event,loadAvatar)">
-</div>
-<div *ngIf="user?.id != me.id">
-  <div ngSwitch="{{user?.friendStatus}}">
-    <div *ngSwitchCase="0">
-      <button (click)="applyRequest()">Apply to friend</button>
+<script>document.getElementById('friendsection').style.height = document.getElementById('avatarsection').style.height;</script>
+<div>
+  <div id="basicinfo" class="container">
+    <div id="avatarsection">
+      <div align="center" class="avatar">
+        <img [src]="avatarUrl">
+      </div>
+      <div *ngIf="user?.id === id">
+        <input (change)="uploadImage($event,loadAvatar)" class="inputfile" id="file" type="file">
+        <label for="file">change</label>
+      </div>
+      <h3>{{user?.username}}</h3>
+      <div *ngIf="user?.id != id">
+        <div ngSwitch="{{user?.friendStatus}}">
+          <div *ngSwitchCase="0">
+            <button (click)="applyRequest()">Apply to friend</button>
+          </div>
+          <div *ngSwitchCase="1">
+            <button (click)="cancel()">Cancel request</button>
+          </div>
+          <div *ngSwitchCase="-1">
+            <button (click)="acceptRequest()">Accept request</button>
+            <button (click)="declineRequest()">Decline request</button>
+          </div>
+          <div *ngSwitchCase="2">
+            <button (click)="unbond()">Delete from friends</button>
+          </div>
+        </div>
+      </div>
     </div>
-    <div *ngSwitchCase="1">
-      <button (click)="cancel()">Cancel request</button>
+    <div id="friendsection">
+      Friends:
+      <div class="wrapper">
+        <div>
+          <ul class="posts" class="friendsTable">
+            <li *ngFor="let friend of user?.friends">
+              <a href="user/{{friend.username}}">{{friend.username}}</a>
+            </li>
+            <li>1</li>
+            <li>1</li>
+            <li>1</li>
+            <li>1</li>
+          </ul>
+        </div>
+      </div>
     </div>
-    <div *ngSwitchCase="-1">
-      <button (click)="acceptRequest()">Accept request</button>
-      <button (click)="declineRequest()">Decline request</button>
-    </div>
-    <div *ngSwitchCase="2">
-      <button (click)="unbond()">Delete from friends</button>
+    <div id="writesection">
+      <br/>
+      <div class="wall">
+        <a routerLink='/chat/{{user?.id}}' routerLinkActive="active">Write</a>
+      </div>
+      <br/>
+      <br/>
     </div>
   </div>
-</div>
-<div class="wrapper">
-  <div class="friends">
+  <div id="wall">
+    <div *ngIf="user?.id == id">
+      <div class="content">
+        <div id="txtArea">
+          <textarea style="display:block;" rows="6" [(ngModel)]="postText"></textarea>
+          <div style='width:100%; box-sizing:border-box; height:35px;padding:50px;'>
+            <div id="buttons">
+              <input (change)="uploadImage($event,_handleReaderLoaded)" id="imageInput" type="file"
+                     style="visibility: hidden">
+              <label for="imageInput"><img src="assets/image.png"/> </label>
+              <button (click)="writePost(postText)">send</button>
+            </div>
+          </div>
+        </div>
+
+        <div *ngFor="let previewUrl of imagesPreview" class="avatar">
+          <img [src]="previewUrl" class="preview">
+        </div>
+      </div>
+    </div>
     <ul class="posts">
-      <li *ngFor="let friend of user?.friends">
-        <a href="user/{{friend.username}}">{{friend.username}}</a>
+      <li *ngFor="let post of user?.posts">
+        <div [innerHTML]="post.text"></div>
+        <br/>
+        <div *ngFor="let image of post.imageUrls">
+          <div class="postimage">
+            <img [src]="image">
+          </div>
+        </div>
+        <ul class="comments">
+          <li *ngFor="let coment of post.coments">
+            <div class="comment">
+            {{coment.text}}
+            </div>
+          </li>
+        </ul>
+<!--        {{post.likes?.length}}-->
+        <div *ngIf="!post.liked">
+          <button class="like_na" (click)="likePost(post)" [value]="post.likers?.length">{{post.likes?.length}}   </button>
+        </div>
+        <div *ngIf="post.liked">
+          <button class="like_a" (click)="unlikePost(post)" [value]="post.likers?.length">{{post.likes?.length}}   </button>
+        </div>
+        <input #comment type="text">
+        <button (click)="writeComment(comment.value, post)">write</button>
       </li>
     </ul>
   </div>
-  <br/>
-  <div class="wall">
-
-    <a routerLink='/chat/{{user?.id}}' routerLinkActive="active">Write</a>
-  </div>
-<br/>
-<br/>
-  <div *ngIf="user?.id == me.id">
-    Write new post
-    <input type=text [(ngModel)]="postText">
-    <input id="imageInput" type="file" (change)="uploadImage($event,_handleReaderLoaded)">
-    <button (click)="writePost(postText)">send</button>
-    <div *ngFor="let previewUrl of imagesPreview" class="avatar">
-      <img [src]="previewUrl" class="preview">
-    </div>
-  </div>
-  <ul class="posts">
-    <li *ngFor="let post of user?.wall?.posts">
-      {{post.text}}
-      <div *ngFor="let image of post.imageUrls">
-        <div class="postimage">
-          <img [src]="image">
-        </div>
-      </div>
-      <button (click)="likePost(post)">{{post.likes?.length}}</button>
-      <input type="text" #comment> <button (click)="writeComment(comment.value, post)">write</button>
-      <ul class="comments">
-        <li *ngFor="let coment of post.coments">
-          {{coment.text}}
-        </li>
-      </ul>
-    </li>
-  </ul>
 </div>

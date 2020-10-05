@@ -12,6 +12,9 @@ export class ChatService {
   getChat(id: string) {
     return this.http.get<Chat>(`${constants.BASE_URL}/chat/${id}`);
   }
+  getChats() {
+    return this.http.get<Chat[]>(`${constants.BASE_URL}/chats`);
+  }
   writeMessage(text: string, id: string) {
     const httpBody = new HttpParams()
       .set('id', id)

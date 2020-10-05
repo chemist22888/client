@@ -29,6 +29,9 @@ export class HttpServiceService {
       .set('id', id);
     return this.http.post(`${constants.BASE_URL}/confirmRegistration`, httpBody);
   }
+  loadNews(){
+    return this.http.get<Post[]>(`${constants.BASE_URL}/testBd`);
+  }
   login(token: string) {
     let headers: HttpHeaders = new HttpHeaders();
     headers = headers.append('Authorization', `Basic ${token}`);
@@ -40,8 +43,12 @@ export class HttpServiceService {
      return this.http.get(constants.BASE_URL + '/image/' + name, { responseType: 'blob' });
   }
 
-  uploadImage(base64textString) {
-    return this.http.post<number>(`${constants.BASE_URL}/loadImage`, 'data:image/png;base64,'
+  uploadImage(base64textString, type) {
+    return this.http.post<number>(`${constants.BASE_URL}/loadImage`, `data:image/${type};base64,`
+      + base64textString);
+  }
+  uploadAvatar(base64textString, type) {
+    return this.http.post<number>(`${constants.BASE_URL}/loadAvatar`, `data:image/${type};base64,`
       + base64textString);
   }
   user(login: string) {
@@ -63,6 +70,5 @@ export class HttpServiceService {
     return this.http.post<Comment>(`${constants.BASE_URL}` + `/writeComent`, new HttpParams()
       .set('text', text)
       .set('postId', String(postId)));
-
   }
 }

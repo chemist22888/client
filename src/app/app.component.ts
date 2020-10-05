@@ -50,15 +50,10 @@ export class AppComponent implements OnInit{
   }
 
   private connect() {
-
-
     const accessToken = localStorage.getItem('access_token');
     const id = Number.parseInt(localStorage.getItem('id'),0);
-
-
     const ws = new SockJS(`${constants.BASE_URL}/socket?access_token=` + accessToken);
     // ws.withCredentials = true ;
-
     this.stompClient = Stomp.over(ws);
     this.stompClient.connect({Authorization: `Bearer ${accessToken}`},  (frame) => {
       this.stompClient.subscribe('/user/queue/chat',  (sdkEvent) => {
@@ -78,7 +73,7 @@ export class AppComponent implements OnInit{
 
       this.stompClient.subscribe('/user/queue/friend',  (sdkEvent) => {
         const friendRequest = JSON.parse(sdkEvent.body);
-
+        console.log('friend');
         if (this.recieverComponent && this.recieverComponent.constructor.name === 'PersonComponent') {
           this.recieverComponent.recieve(constants.FRIEND_DATA, friendRequest);
         }

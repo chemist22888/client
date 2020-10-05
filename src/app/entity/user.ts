@@ -6,12 +6,15 @@ export class User {
   id: number;
   username: string;
   password: string;
-  wall: Wall;
+  // wall: Wall;
   friends: User[];
   friendStatus: number;
   avatar: number;
   role: string;
-  constructor(id) {
+  constructor(id, username?) {
     this.id = id;
+    this.username = username;
   }
+  posts: Post[];
+
 }

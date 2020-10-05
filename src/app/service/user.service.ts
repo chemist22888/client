@@ -10,10 +10,14 @@ import * as constants from '../configs/constants';
 export class UserService {
 
   constructor(private http: HttpClient) {}
-  getLogin() {
+  getMe() {
     let header = new HttpHeaders();
-    header = header.append('foo', 'foo');
     return this.http.get<string>(`${constants.BASE_URL}/me`,
+      { headers: header});
+  }
+  getMeShort() {
+    let header = new HttpHeaders();
+    return this.http.get<string>(`${constants.BASE_URL}/meShort`,
       { headers: header});
   }
   applyRequest(username: string) {
@@ -34,4 +38,14 @@ export class UserService {
   likePost(postId: number) {
     return this.http.post(`${constants.BASE_URL}/likePost`, new HttpParams().set('postId', '' + postId));
   }
+  unlikePost(postId: number) {
+    return this.http.post(`${constants.BASE_URL}/unlikePost`, new HttpParams().set('postId', '' + postId));
+  }
+  requestTo() {
+    return this.http.get<User[]>(`${constants.BASE_URL}/requestsTo`);
+  }
+  requestFrom() {
+    return this.http.get<User[]>(`${constants.BASE_URL}/requestsFrom`);
+  }
+
 }
