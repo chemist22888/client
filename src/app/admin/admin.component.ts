@@ -36,7 +36,6 @@ export class AdminComponent implements OnInit {
 
     this.adminService.loadMorePosts(id, 10).subscribe(
       posts => {
-        console.log(posts);
         posts.forEach(post => {
           post.imageUrls = [];
           post.images.forEach(imageId => {
@@ -47,7 +46,6 @@ export class AdminComponent implements OnInit {
             });
           });
           this.posts.push(post);
-          console.log(post);
         });
       }
     );
@@ -57,10 +55,8 @@ export class AdminComponent implements OnInit {
 
     this.adminService.loadMoreComments(id, 10).subscribe(
       comments => {
-        console.log(comments);
         comments.forEach(comment => {
           this.comments.push(comment);
-          console.log(comment);
         });
       }
     );

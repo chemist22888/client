@@ -161,7 +161,6 @@ export class PersonComponent implements OnInit, DataReciever {
     const like = new Like();
 
     this.userService.unlikePost(post.id).subscribe(res => {
-      console.log('rooock');
       post.liked = false;
       post.likes = post.likes.filter((likepost) => likepost.user.id !== this.id);
       post.likers = post.likers.filter((liker) => liker.id !== this.id);
@@ -175,9 +174,7 @@ export class PersonComponent implements OnInit, DataReciever {
 
     if (files && file) {
       const reader = new FileReader();
-      // this.filename = file.name;
       reader.onload = funct.bind(this);
-      console.log(this.filename);
       reader.readAsBinaryString(file);
     }
   }
@@ -221,7 +218,6 @@ export class PersonComponent implements OnInit, DataReciever {
 
     this.httpService.uploadAvatar(encodedString, type)
       .subscribe(e => {
-        console.log(e);
         this.httpService.loadImage(e).subscribe(res => {
           this.uploadedImages.push(e);
           const reader = new FileReader();

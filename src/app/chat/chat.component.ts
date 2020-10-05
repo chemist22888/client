@@ -33,7 +33,6 @@ export class ChatComponent implements OnInit, DataReciever {
     this.chatId = this.route.snapshot.paramMap.get('id');
     this.userId = localStorage.getItem('íd');
     this.chatService.getChat(this.chatId).subscribe(chat => {
-      console.log('t1t' + chat.id);
       this.chat = chat;
       this.connect();
       this.myId = parseInt(localStorage.getItem('id'), 0);
@@ -75,8 +74,7 @@ export class ChatComponent implements OnInit, DataReciever {
   recieve(type, msg) {
     console.log(msg);
     if (type === constants.MESSAGE_DATA && msg.chatId === this.chat.id) {
-      console.log('5f');
-      const l = this.chat.messages.push(msg);
+      this.chat.messages.push(msg);
     }
   }
 }

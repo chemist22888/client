@@ -38,7 +38,6 @@ export class AuthenticationService {
   .set('password',password);
 
     return this.http.post(`${constants.BASE_URL}/oauth/token`, data, {headers}).pipe(map(auth => {
-      console.log(auth);
       if (auth['access_token']) {
           localStorage.setItem('access_token', auth['access_token']);
         }

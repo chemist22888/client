@@ -35,7 +35,6 @@ export class AppComponent implements OnInit{
   constructor( private http:HttpClient,private router:Router,private cs: CookieService, private route: ActivatedRoute,
                private userService: UserService) {}
   ngOnInit() {
-    console.log(++this.i);
     this.connect();
   }
   public onRouterOutletActivate(event: any) {
@@ -57,13 +56,9 @@ export class AppComponent implements OnInit{
     this.stompClient = Stomp.over(ws);
     this.stompClient.connect({Authorization: `Bearer ${accessToken}`},  (frame) => {
       this.stompClient.subscribe('/user/queue/chat',  (sdkEvent) => {
-        console.log(this.recieverComponent);
-        console.log(this.i++);
-        console.log(sdkEvent);
         const msg = JSON.parse(sdkEvent.body);
         if (msg.user.id !== id) {
           alert(msg.text);
-          console.log(msg.text);
         }
 
         if (this.recieverComponent && this.recieverComponentName === 'ChatComponent') {
@@ -73,12 +68,10 @@ export class AppComponent implements OnInit{
 
       this.stompClient.subscribe('/user/queue/friend',  (sdkEvent) => {
         const friendRequest = JSON.parse(sdkEvent.body);
-        console.log('friend');
         if (this.recieverComponent && this.recieverComponent.constructor.name === 'PersonComponent') {
           this.recieverComponent.recieve(constants.FRIEND_DATA, friendRequest);
         }
       });
     });
   }
-
 }

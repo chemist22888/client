@@ -35,7 +35,6 @@ export class HttpServiceService {
   login(token: string) {
     let headers: HttpHeaders = new HttpHeaders();
     headers = headers.append('Authorization', `Basic ${token}`);
-    console.log(headers);
     return this.http.get<User>(`${constants.BASE_URL}/user/login1`, { headers });
   }
 
@@ -52,8 +51,6 @@ export class HttpServiceService {
       + base64textString);
   }
   user(login: string) {
-    console.log(login);
-
     return this.http.get<User>(`${constants.BASE_URL}/user/${login}`, {});
   }
   writePost(text: string, images: number[]) {

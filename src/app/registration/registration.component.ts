@@ -19,7 +19,6 @@ export class RegistrationComponent implements OnInit {
       this.confirmId = params.get('confirmId');
 
       if (this.confirmId) {
-        console.log(this.confirmId);
         this.httpService.confirmRegistration(this.confirmId).subscribe(() => {
           this.router.navigateByUrl('/login');
         });
