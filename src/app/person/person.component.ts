@@ -213,7 +213,6 @@ export class PersonComponent implements OnInit, DataReciever {
   loadAvatar(event) {
     const binaryString = event.target.result;
     const encodedString = btoa(binaryString);
-    // console.log(binaryString);
     const type = this.filename.substr(this.filename.lastIndexOf('.') + 1, 3);
 
     this.httpService.uploadAvatar(encodedString, type)
